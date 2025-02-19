@@ -25,8 +25,8 @@ public class Post {
     private Date createdAt ;
 
 
-//    @OneToMany(mappedBy = "post")
-//    private List<Comment> comments;
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "authorId")
