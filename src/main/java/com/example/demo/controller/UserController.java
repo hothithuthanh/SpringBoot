@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.User;
 import org.springframework.ui.Model;
 
 import com.example.demo.DTO.RegisterDTO;
