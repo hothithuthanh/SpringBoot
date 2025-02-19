@@ -23,7 +23,7 @@ public class Post {
     private String title;
     private String content;
     private Date createdAt ;
-
+    private boolean isAccept;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;

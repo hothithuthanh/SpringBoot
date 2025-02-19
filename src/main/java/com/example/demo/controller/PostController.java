@@ -36,6 +36,7 @@ public class PostController {
     public String addPost(@Validated @ModelAttribute("article") PostDTO postDTO, Principal principal) {
         postDTO.setCreatedAt(new Date());
         postDTO.setAuthor(principal.getName());
+        postDTO.setAccept(false);
         System.out.println(principal.getName());
         postService.save(postDTO);
         return "redirect:/home";
@@ -83,9 +84,9 @@ public class PostController {
         return "redirect:/home";
     }
 
-    @PostMapping("/deleteArticle/{id}")
+    @GetMapping("/deleteArticle/{id}")
     public String deletePost(@PathVariable("id") Long id) {
-        if (postService.deletePostById(id)) return "redirect:/home";
+        postService.deletePostById(id);
         return "redirect:/home";
     }
     

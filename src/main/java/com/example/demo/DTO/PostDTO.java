@@ -19,6 +19,7 @@ public class PostDTO {
     private String content;
     private Date createdAt ;
     private String author;
+    private boolean isAccept;
 
     public PostDTO(Post post) {
         this.id = post.getId();
@@ -26,6 +27,7 @@ public class PostDTO {
         this.content = post.getContent();
         this.createdAt = post.getCreatedAt();
         this.author = post.getAuthor().getUsername();
+        this.isAccept = post.isAccept();
     }
 
     public Post toPost(User user){
@@ -34,6 +36,7 @@ public class PostDTO {
                 .title(this.title)
                 .content(this.content)
                 .createdAt(this.createdAt)
+                .isAccept(this.isAccept)
                 .author(user)
                 .build();
     }

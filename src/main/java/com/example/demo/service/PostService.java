@@ -34,9 +34,13 @@ public class PostService {
     public Page<PostDTO> getPosts(int page) {
         int pageSize = 3;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return postRepository.findAllByisAccept(true, pageable).map(PostDTO::new);
+    }
+    public Page<PostDTO> findAll(int page){
+        int pageSize = 3;
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
         return postRepository.findAll(pageable).map(PostDTO::new);
     }
-
     public PostDTO getPostById(Long id) {
         return postRepository.findById(id).map(PostDTO::new).orElse(null);
     }
@@ -44,7 +48,7 @@ public class PostService {
     public Page<PostDTO> getPostsByUserId(int page, Long id) {
         int pageSize = 3;
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return postRepository.findAllByAuthor_Id(id, pageable).map(PostDTO::new);
+        return postRepository.findAllByAuthor_IdAndIsAccept(id,true, pageable).map(PostDTO::new);
     }
 
     public Boolean deletePostById(Long id) {
@@ -55,7 +59,5 @@ public class PostService {
         return false;
     }
 
-    public List<PostDTO> findAll(){
-        return postRepository.findAll().stream().map(PostDTO::new).toList();
-    }
+
 }
