@@ -11,11 +11,11 @@
     <h2>Login</h2>
     <form  class="login-form" method="post" th:object="${loginRequest}">
         <div class="form-group">
-            <label for="username">Username</label>
+            <label>Username</label>
             <input type="text" th:field="*{username}" placeholder="Enter your username" required>
         </div>
         <div class="form-group">
-            <label for="password">Password</label>
+            <label >Password</label>
             <input type="password" th:field="*{password}"  placeholder="Enter your password" required>
         </div>
         <button type="submit" id="bnt-login" class="login-btn">Login</button>

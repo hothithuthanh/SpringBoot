@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.DTO.PostDTO;
 import com.example.demo.DTO.RegisterDTO;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
@@ -10,6 +11,9 @@ import java.security.Principal;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,9 +38,9 @@ public class UserService implements UserDetailsService {
         return user != null && user.getPassword().equals(password);
     }
 
-    public User saveUser(RegisterDTO registerDTO) {
+    public User saveUser(RegisterDTO registerDTO, String roleName) {
     
-        Role role = roleRepository.findByNameRole("USER");
+        Role role = roleRepository.findByNameRole(roleName);
 
             var bCryptEncoder = new BCryptPasswordEncoder();
             User newUser = new User();
@@ -45,8 +49,6 @@ public class UserService implements UserDetailsService {
             newUser.setRole(role);
             newUser.setEmail(registerDTO.getEmail());
            return userRepository.save(newUser);
-
-        
     }
 
     @Override
@@ -73,5 +75,17 @@ public class UserService implements UserDetailsService {
         String username = principal.getName();
         User user = userRepository.findByUsername(username);
         return new RegisterDTO(user);
+    }
+    public Page<RegisterDTO> findAll(int page){
+        int pageSize = 3;
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return userRepository.findAll(pageable).map(RegisterDTO::new);
+    }
+    public Boolean deleteUserById(Long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

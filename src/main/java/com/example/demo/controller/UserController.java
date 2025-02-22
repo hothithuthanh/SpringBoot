@@ -50,7 +50,7 @@ public class UserController {
     public String register(@Validated @ModelAttribute("registerDto") RegisterDTO registerDTO, Model model,
             BindingResult result) {
         try {
-            userService.saveUser(registerDTO);
+            userService.saveUser(registerDTO, "USER");
             model.addAttribute("registerDto", new RegisterDTO());
             model.addAttribute("success", true);
             }
@@ -70,8 +70,13 @@ public class UserController {
 
     @PostMapping("/profile/update")
     public String updateProfile(@Validated @ModelAttribute("user") RegisterDTO user, Model model) {
-        userService.saveUser(user);
+        userService.saveUser(user, "USER");
         return "myprofile";
+    }
+    @GetMapping("/deleteUser/{id}")
+    public String deletePost(@PathVariable("id") Long id) {
+        userService.deleteUserById(id);
+        return "redirect:/admin";
     }
 }
 

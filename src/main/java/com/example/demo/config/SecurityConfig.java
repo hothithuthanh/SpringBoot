@@ -22,14 +22,22 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/home/**", "/login", "/register", "/logout", "/home").permitAll()
-                        .requestMatchers("/admin/posts/**").permitAll()
+                        .requestMatchers( "/home/**", "/home").hasRole("USER")
+                        .requestMatchers("/admin/posts/**", "/admin/posts","/admin/users", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/login", "/register", "/logout","/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/home", true)
+                        .successHandler((request, response, authentication) -> {
+                            System.out.println("User Roles: " + authentication.getAuthorities());
+                            boolean isAdmin = authentication.getAuthorities().stream()
+                                            .anyMatch(auth -> auth.getAuthority().equals("ADMIN") || auth.getAuthority().equals("ROLE_ADMIN"));
+
+                            String redirectUrl = isAdmin ? "/admin" : "/home";
+                            response.sendRedirect(redirectUrl);
+                        })
                         .permitAll()
                 )
                 .logout(config -> config

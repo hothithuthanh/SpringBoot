@@ -7,8 +7,12 @@ import com.example.demo.service.UserService;
 import java.security.Principal;
 import java.util.Date;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,9 +89,15 @@ public class PostController {
     }
 
     @GetMapping("/deleteArticle/{id}")
-    public String deletePost(@PathVariable("id") Long id) {
+    public String deletePost(@PathVariable("id") Long id, HttpServletRequest request) {
         postService.deletePostById(id);
-        return "redirect:/home";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            return "redirect:/admin/posts";
+        } else {
+            return "redirect:/home";
+        }
     }
     
 }

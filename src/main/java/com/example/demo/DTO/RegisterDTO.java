@@ -1,10 +1,14 @@
 package com.example.demo.DTO;
 
 import com.example.demo.model.User;
+import lombok.Getter;
 
 public class RegisterDTO {
+    private Long id;
+    private String nameRole;
      private String username;
     private String email;
+    @Getter
     private String password;
     public String getUsername() {
         return username;
@@ -18,9 +22,23 @@ public class RegisterDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getPassword() {
-        return password;
+
+    public Long getId() {
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNameRole() {
+        return nameRole;
+    }
+
+    public void setNameRole(String nameRole) {
+        this.nameRole = nameRole;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -35,6 +53,7 @@ public class RegisterDTO {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.password = user.getPassword();
-
+        this.id = user.getId();
+        this.nameRole = user.getRole().getNameRole();
     }
 }
