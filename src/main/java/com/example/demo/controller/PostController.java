@@ -33,7 +33,7 @@ public class PostController {
     @GetMapping("/article")
     public String addPost(Model model) {
         model.addAttribute("article", new PostDTO());
-        return "AddPost";
+        return "Post/AddPost";
     }
 
     @PostMapping("/article")
@@ -52,7 +52,7 @@ public class PostController {
         model.addAttribute("posts", posts.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", posts.getTotalPages());
-        return "home";
+        return "Post/home";
     }
 
     @GetMapping("/myArticle")
@@ -64,19 +64,19 @@ public class PostController {
         model.addAttribute("article", posts.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", posts.getTotalPages());
-        return "myArticle";
+        return "Post/myArticle";
     }
-    @GetMapping("/detailArticle/{id}")
-    public String detailPost(Model model, @PathVariable("id") Long id) {
-        PostDTO postDTO = postService.getPostById(id);
-        model.addAttribute("article", postDTO);
-        return "PostDetail";
-    }
+//    @GetMapping("/detailArticle/{id}")
+//    public String detailPost(Model model, @PathVariable("id") Long id) {
+//        PostDTO postDTO = postService.getPostById(id);
+//        model.addAttribute("article", postDTO);
+//        return "Post/PostDetail";
+//    }
     @GetMapping("/updateArticle/{id}")
     public String updatePost(Model model, @PathVariable("id") Long id) {
         PostDTO postDTO = postService.getPostById(id);
         model.addAttribute("article", postDTO);
-        return "updatePost";
+        return "Post/updatePost";
     }
 
     @PostMapping("/updateArticle/{id}")

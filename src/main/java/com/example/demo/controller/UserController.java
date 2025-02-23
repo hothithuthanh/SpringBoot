@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("loginRequest", new LoginRequest());
-        return "login";
+        return "user/login";
     }
 
     @PostMapping("/login")
@@ -35,7 +35,7 @@ public class UserController {
             return "redirect:/home";
         }
         else
-            return "login";
+            return "user/login";
     }
     
     @GetMapping("/register")
@@ -43,7 +43,7 @@ public class UserController {
         RegisterDTO registerDTO = new RegisterDTO();
         model.addAttribute("registerDto", registerDTO);
         model.addAttribute("success", false);
-        return "register";
+        return "user/register";
     }
 
     @PostMapping("/register")
@@ -59,19 +59,19 @@ public class UserController {
                     new FieldError("registerDto", "username", e.getMessage()));
         }
             
-        return "register";
+        return "user/register";
     }
 
     @GetMapping("/profile/update")
     public String updateProfile(Model model, Principal principal) {
         model.addAttribute("user", userService.getUserByPrincipal(principal));
-        return "updateProfile";
+        return "user/updateProfile";
     }
 
     @PostMapping("/profile/update")
     public String updateProfile(@Validated @ModelAttribute("user") RegisterDTO user, Model model) {
         userService.saveUser(user, "USER");
-        return "myprofile";
+        return "user/myprofile";
     }
     @GetMapping("/deleteUser/{id}")
     public String deletePost(@PathVariable("id") Long id) {
