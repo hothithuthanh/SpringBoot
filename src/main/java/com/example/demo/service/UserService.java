@@ -41,14 +41,16 @@ public class UserService implements UserDetailsService {
     public User saveUser(RegisterDTO registerDTO, String roleName) {
     
         Role role = roleRepository.findByNameRole(roleName);
-
-            var bCryptEncoder = new BCryptPasswordEncoder();
-            User newUser = new User();
-            newUser.setUsername(registerDTO.getUsername());
-            newUser.setPassword(bCryptEncoder.encode(registerDTO.getPassword()));
-            newUser.setRole(role);
-            newUser.setEmail(registerDTO.getEmail());
-           return userRepository.save(newUser);
+        var bCryptEncoder = new BCryptPasswordEncoder();
+        User newUser = new User();
+        newUser = userRepository.findByEmail(registerDTO.getEmail());
+        if (newUser == null) {
+                newUser.setEmail(registerDTO.getEmail());
+        }
+        newUser.setUsername(registerDTO.getUsername());
+        newUser.setPassword(bCryptEncoder.encode(registerDTO.getPassword()));
+        newUser.setRole(role);
+        return userRepository.save(newUser);
     }
 
     @Override
@@ -87,5 +89,13 @@ public class UserService implements UserDetailsService {
             return true;
         }
         return false;
+    }
+    public boolean updatePassword(String username, String oldPassword) {
+        User user = userRepository.findByUsername(username);
+        var passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return false;
+        }
+        return true;
     }
 }

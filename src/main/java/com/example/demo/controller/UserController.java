@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 
 import com.example.demo.DTO.RegisterDTO;
@@ -13,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -62,21 +66,40 @@ public class UserController {
         return "user/register";
     }
 
-    @GetMapping("/profile/update")
+    @GetMapping("/profile")
+    public String show(Model model, Principal principal) {
+        model.addAttribute("user", userService.getUserByPrincipal(principal));
+        return "user/myprofile";
+    }
+
+    @PostMapping("/profile")
     public String updateProfile(Model model, Principal principal) {
         model.addAttribute("user", userService.getUserByPrincipal(principal));
         return "user/updateProfile";
     }
 
     @PostMapping("/profile/update")
-    public String updateProfile(@Validated @ModelAttribute("user") RegisterDTO user, Model model) {
-        userService.saveUser(user, "USER");
-        return "user/myprofile";
+    public ResponseEntity<Map<String, Object>> updateProfile(@Validated @RequestBody RegisterDTO user) {
+        try {
+            userService.saveUser(user, "USER");
+            return ResponseEntity.ok(Map.of("success", true));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "error", e.getMessage()));
+        }
     }
+
     @GetMapping("/deleteUser/{id}")
     public String deletePost(@PathVariable("id") Long id) {
         userService.deleteUserById(id);
         return "redirect:/admin";
     }
+    @PostMapping("/checkPassword")
+    public ResponseEntity<Map<String, Boolean>> checkPassword(@RequestBody Map<String, String> request, Principal principal) {
+        boolean isValid = userService.updatePassword(principal.getName(), request.get("password_old"));
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("valid", isValid);
+        return ResponseEntity.ok(response);
+    }
+
 }
 

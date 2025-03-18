@@ -1,10 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" th:href="@{/css/updateProfile.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css}" >
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js}">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css}" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg bg-light border-bottom">
+    <div class="container">
+        <a class="navbar-brand" href="/home">POST</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-dark"  href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/article">Post</a>
+                </li>
 
+            </ul>
+
+            <ul class="navbar-nav me-3" sec:authorize="isAuthenticated()">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">
+                        <p th:text="${#authentication.principal.username}"></p>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/home">Trang chủ</a></li>
+                        <li><a class="dropdown-item" href="/profile">Hồ sơ</a></li>
+                        <li><a class="dropdown-item" href="/myArticle">Bài viết của tôi</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
+                <li class="nav-item">
+                    <a class="btn btn-outline-primary me-2" href="/register">Register</a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary" href="/login">Login</a>
+                </li>
+            </ul>
+            <form sec:authorize="isAuthenticated()" method="post" action="/logout">
+                <button class="btn btn-danger" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container py-5 mt-4 mb-4 p-3 d-flex justify-content-center">
+    <div class="card p-4">
+        <div class=" image d-flex flex-column justify-content-center align-items-center">
+            <form th:method="post">
+                <div>
+                    <h5>Username:</h5>
+                    <span class="name mt-3" th:text="${user.username}"></span>
+                </div>
+               <div>
+                   <h5>Email:</h5>
+                   <span class="idd" th:text="${user.email}"></span>
+               </div>
+                <div class="d-flex mt-2">
+                    <button class="btn1 btn-dark">Edit Profile</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
 </body>
-</html>

@@ -66,12 +66,6 @@ public class PostController {
         model.addAttribute("totalPages", posts.getTotalPages());
         return "Post/myArticle";
     }
-//    @GetMapping("/detailArticle/{id}")
-//    public String detailPost(Model model, @PathVariable("id") Long id) {
-//        PostDTO postDTO = postService.getPostById(id);
-//        model.addAttribute("article", postDTO);
-//        return "Post/PostDetail";
-//    }
     @GetMapping("/updateArticle/{id}")
     public String updatePost(Model model, @PathVariable("id") Long id) {
         PostDTO postDTO = postService.getPostById(id);

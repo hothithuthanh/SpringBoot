@@ -34,4 +34,14 @@ public class CommentDTO {
                 .post(post)
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return "CommentDTO{" +
+                "content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                ", author='" + author + '\'' +
+                ", postId=" + postId +
+                '}';
+    }
 }
